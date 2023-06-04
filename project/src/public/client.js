@@ -1,25 +1,30 @@
 // const { map } = require('./assets/js/rxjs.min');
 // import { fromFetch } from 'rxjs/fetch';
 
-let store = {
+// let store = {
+//   user: { name: 'Student' },
+//   apod: '',
+//   rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+//   selectedRover: '',
+// };
+
+let store = Immutable.Map({
   user: { name: 'Student' },
   apod: '',
   rovers: ['Curiosity', 'Opportunity', 'Spirit'],
   selectedRover: '',
-};
-
-// let store = Immutable.Map({
-//   user: { name: 'Student' },
-//   apod: '',
-//   date: '',
-//   rovers: ['Curiosity', 'Opportunity', 'Spirit'],
-// });
+});
 
 // add our markup to the page
 const root = document.getElementById('root');
 
+// const updateStore = (store, newState) => {
+//   store = Object.assign(store, newState);
+//   render(root, store);
+// };
+
 const updateStore = (store, newState) => {
-  store = Object.assign(store, newState);
+  store = store.merge(newState);
   render(root, store);
 };
 
@@ -29,7 +34,11 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-  let { rovers, apod } = state;
+  // let { rovers, apod } = state;
+  let rovers = state.get('rovers');
+  let apod = state.get('apod');
+  let nowSelectedRover = state.get('selectedRover');
+  console.log(nowSelectedRover, 'NOW SELECTED ROVER');
 
   return `
         <header><h1>Mars Dashboard</h1>
@@ -87,12 +96,15 @@ const Greeting = (name) => {
   `;
 };
 
-const SelectedContent = (state) => {
-  if (state.selectedRover != '') {
-    const photos = state.selectedRoverData.selectedRoverData;
-    console.log(photos.latest_photos[0].camera.full_name, 'MAP FUC');
-    console.log(photos.latest_photos[0].img_src, 'PATHS');
-    return photos.latest_photos
+const SelectedContent = (store) => {
+  const selectedRover = store.get('selectedRover');
+  if (selectedRover !== '') {
+    const selectedRoverData = store.get('selectedRoverData');
+    if (!selectedRoverData) {
+      return 'Loading...'; // Add a loading message or placeholder while the data is being fetched
+    }
+    const photos = selectedRoverData.get('latest_photos');
+    return photos
       .map((photo, index) => {
         const isFirstLoop = index === 0;
         return `
@@ -156,11 +168,12 @@ const SelectedContent = (state) => {
       })
       .join('');
   } else {
-    return ImageOfTheDay(store.apod);
+    return ImageOfTheDay(store.get('apod'));
   }
 };
 
 const Menu = (menuItems) => {
+  console.log(menuItems, 'MENU ITEMS');
   return menuItems.map((menuItem) => {
     return `    
         <a href="#" id="${menuItem}" onclick="selectedMenueItem(${menuItem})">${menuItem}</a>   
@@ -168,12 +181,23 @@ const Menu = (menuItems) => {
   });
 };
 
-function selectedMenueItem(menueItem) {
-  const selectedRover = menueItem.id;
+// function selectedMenueItem(menueItem) {
+//   const selectedRover = menueItem.id;
+//   console.log(selectedRover, 'my selection');
+//   // updateStore(store, { selectedRover });
+//   updateStore(store, Immutable.Map({ selectedRover: selectedRover }));
+//   // getFetchedRoverData(selectedRover);
+//   getFetchedRoverData(selectedRover.toString()); // Convert selectedRover to a string using toString()
+//   SelectedContent();
+// }
+
+function selectedMenueItem(menuItem) {
+  // const selectedRover = menuItem.toString(); // Convert the menu item to a string
+  const selectedRover = menuItem.innerHTML;
   console.log(selectedRover, 'my selection');
   updateStore(store, { selectedRover });
   getFetchedRoverData(selectedRover);
-  SelectedContent();
+  SelectedContent(store); // Pass the store as an argument to SelectedContent
 }
 
 // Example of a pure function that renders infomation requested from the backend
@@ -235,3 +259,13 @@ const getFetchedRoverData = (roverName) => {
       // console.log(latestPhotos, 'FROM FETCH');
     });
 };
+
+// const getFetchedRoverData = (roverName) => {
+//   fetch(`http://localhost:3000/rover/${roverName}`)
+//     .then((res) => res.json())
+//     .then((selectedRoverData) => {
+//       // const latestPhotos = selectedRoverData.latest_photos;
+//       updateStore(store, { selectedRoverData });
+//       // console.log(latestPhotos, 'FROM FETCH');
+//     });
+// };
