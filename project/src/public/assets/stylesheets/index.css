@@ -15,25 +15,31 @@ header {
   text-align: center;
 }
 
-/* Style the top navigation bar */
 .topnav {
   overflow: hidden;
   background-color: #333;
 }
 
-/* Style the topnav links */
 .topnav a {
   float: left;
   display: block;
-  color: #f2f2f2;
+  color: #ff5757;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
 
-/* Change color on hover */
+.back-nav-btn {
+  float: left;
+  display: block;
+  color: #ff5757;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
 .topnav a:hover {
-  background-color: #ddd;
+  background-color: #fe3030;
   color: black;
 }
 
@@ -43,6 +49,10 @@ main {
   float: left;
   padding: 15px;
   border: 1px solid red; */
+}
+
+h1 {
+  text-shadow: 1px 1px rgba(243, 8, 8, 0.722);
 }
 
 /* Create two unequal columns that floats next to each other */
@@ -60,11 +70,20 @@ main {
   padding-left: 20px;
 }
 
-/* Fake image */
-.fakeimg {
-  background-color: #aaa;
+/* Side Menu */
+.side-menu {
+  background-color: rgba(175, 128, 112, 0.1);
   width: 100%;
-  padding: 20px;
+  padding: 10px;
+}
+
+.side-menu > a {
+  text-decoration: none;
+}
+
+.side-menu > img {
+  text-align: justify-all;
+  text-align: center;
 }
 
 /* Add a card effect for articles */
@@ -72,6 +91,11 @@ main {
   background-color: white;
   padding: 20px;
   margin-top: 20px;
+  line-height: 1.4;
+}
+
+.photocard {
+  line-height: 1.6;
 }
 
 /* Clear floats after the columns */
@@ -88,7 +112,6 @@ main {
 }
 
 .column-right {
-  /* float: left; */
   width: auto;
   padding: 15px;
   display: inline-block;
@@ -105,19 +128,74 @@ main {
   width: 200px;
 }
 
+/* Side Menu Image */
+.circular_image {
+  width: 50%;
+  height: auto;
+  border-radius: 100%;
+  overflow: hidden;
+  background-color: blue;
+  display: inline-block;
+  text-align: center;
+  justify-content: space-between;
+  text-align: -moz-center;
+  text-align: -webkit-center;
+}
+
 footer {
   /* footer styles */
 }
 
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
-  /* use mobile */
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+  .leftcolumn {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+  }
+  .rightcolumn {
+    width: fit-content;
+    padding-left: 0%;
+  }
+}
+
+@media (max-width: 768px) {
+  .leftcolumn {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+  }
+  .rightcolumn {
+    width: fit-content;
+    padding-left: 0%;
+  }
 }
 
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
   /* use mobile */
+  .leftcolumn {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+  }
+  .rightcolumn {
+    width: 30%;
+    padding-left: 20px;
+  }
+
+  img {
+    max-width: inherit;
+    max-height: inherit;
+    height: inherit;
+    width: inherit;
+    justify-content: center;
+  }
 }
 
 /* -------------------  LARGE SCREENS  -------------- */
